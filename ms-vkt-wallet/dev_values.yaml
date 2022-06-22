@@ -1,0 +1,81 @@
+# Default values for ms-vkt-wallet.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: devVKT/ms-vkt-wallet
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "sha-0430ac2"
+ 
+MYSQL_HOST: rds.sandbox.vkt-dev-vpc.com
+MYSQL_USER: vkt_client
+MYSQL_DATABASE: vkt_client_db
+MYSQLSecretName: mysql
+MYSQLSecretKey: password
+
+ALCHEMY_APIKEYName: alchemykeyname
+ALCHEMY_APIKEYSValue: alchemykeyvalue
+
+ETHAPIKEYName: ethkeyname
+ETHAPIKEYValue: ethkeyvalue
+
+NodeEnvValue: dev
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  type: ClusterIP
+  port: 80
+  socket_port: 5702
+
+ingress:
+  enabled: true
+  annotations: 
+    kubernetes.io/ingress.class: traefik
+  hosts:
+    - host: app.dev.vkt-wallet.io
+      paths: ["/wallet"]
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
